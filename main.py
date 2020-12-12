@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import time
 import re
+import user_manager as um
 
 message_write = None
 
@@ -9,19 +10,22 @@ message_write = None
 #
 # Data = "Ваши данные сохраннены"
 
-w_n = 0
 # RES_PATH = "D:\\USERDATA\\Gleb\\Python\\olimponline\\res\\"
 RES_PATH = ".\\res\\"
 
 
-def show_message():
-    global message_write
-    global w_n
+def start_session():
 
-    message_write = username.get()
-    messagebox.showinfo("ВНИМАНИЕ!!!", message="Здравствуйте, %s" % message_write)
+    if um.check_user(username.get(), password.get()):
+        pass
+        # messagebox.showinfo("ВНИМАНИЕ!!!", message="Логин или пароль верен!")
+    else:
+        messagebox.showinfo("ВНИМАНИЕ!!!", message="Логин или пароль неверен!")
+        return
+
+    messagebox.showinfo("ВНИМАНИЕ!!!", message="Здравствуйте, %s" % username.get())
     file = open("log/programm.log.txt", 'a+')
-    file.write(message_write + " Вошёл(ла) в систему в %s"%time.strftime("%c"))
+    file.write(username.get() + " Вошёл(ла) в систему в %s" % time.strftime("%c") + "\n")
     root.destroy()
     canvas_root = Tk()
     canvas_root.resizable(0, 0)
@@ -55,16 +59,16 @@ root.title("ВИКТОРИНА")
 root.geometry("1300x700")
 
 username = StringVar()
-
 message_entry = Entry(textvariable=username, font="arial 30")
 message_entry.place(relx=.5, rely=.1, anchor="c")
 
 password = StringVar()
-
 message_entry = Entry(textvariable=password, font="arial 30")
 message_entry.place(relx=.5, rely=.2, anchor="c")
 
-message_button = Button(text="Войти", command=show_message, font="arial 30")
+message_button = Button(text="Войти", command=start_session, font="arial 30")
 message_button.place(relx=.5, rely=.5, anchor="c")
 
 root.mainloop()
+
+
